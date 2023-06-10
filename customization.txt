@@ -1,0 +1,1 @@
+if you select 4 squares which make a bigger square, you unlock a powerup

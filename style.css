@@ -1,0 +1,59 @@
+body {
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    font-family: Arial, sans-serif;
+  }
+  
+  h1 {
+    margin-top: 20px;
+  }
+  
+  .game-board {
+    display: grid;
+    grid-template-columns: repeat(6, 80px);
+    grid-gap: 10px;
+    margin-top: 20px;
+    margin-bottom: 20px;
+  }
+  
+  .game-block {
+    width: 80px;
+    height: 80px;
+    background-color: lightgray;
+    border: 1px solid gray;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+  }
+  
+  .scored {
+    background-color: darkgreen;
+  }
+  
+  .fielder {
+    animation: flash 1s infinite;
+  }
+  
+  .fielder-others {
+    background-color: orange;
+  }
+  
+  .non-selected-safe-light {
+    background-color: #c2f0c2;
+  }
+  
+  .selected-safe {
+    background-color: darkgreen;
+  }
+  
+  @keyframes flash {
+    0% { background-color: red; }
+    50% { background-color: transparent; }
+    100% { background-color: red; }
+  }
+  
