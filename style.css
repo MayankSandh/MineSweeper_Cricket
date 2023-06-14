@@ -7,19 +7,20 @@ body {
   height: 100vh;
   font-family: Arial, sans-serif;
 }
-
+:root {
+  --grid-size: 5;
+}
 h1 {
   margin-top: 20px;
 }
 
 .game-board {
   display: grid;
-  grid-template-columns: repeat(6, 80px);
+  grid-template-columns: repeat(var(--grid-size), 80px);
   grid-gap: 10px;
   margin-top: 20px;
   margin-bottom: 20px;
 }
-
 .game-block {
   width: 80px;
   height: 80px;

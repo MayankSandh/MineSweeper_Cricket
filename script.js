@@ -2,7 +2,22 @@ document.addEventListener("DOMContentLoaded", function() {
   const grid = document.querySelector(".game-board");
   const scoreDisplay = document.getElementById("score");
   const resetButton = document.getElementById("reset-button");
-  let gridSize = 6;
+  const dropdownButton = document.querySelector(".dropbtn");
+  const dropdownContent = document.querySelector(".dropdown-content");
+
+  dropdownButton.addEventListener("click", function() {
+    dropdownContent.classList.toggle("show");
+  });
+
+  dropdownContent.addEventListener("click", function(event) {
+    const selectedSize = parseInt(event.target.dataset.size);
+    if (!isNaN(selectedSize)) {
+      changeGridSize(selectedSize);
+      dropdownContent.classList.remove("show");
+    }
+  });
+
+  let gridSize = 7;
   const numFielders = 11;
   let score = 0;
   let isGameOver = false;
@@ -10,6 +25,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
   function createGrid() {
     grid.innerHTML = "";
+    grid.style.gridTemplateColumns = `repeat(${gridSize}, 80px)`;
     for (let i = 0; i < gridSize; i++) {
       for (let j = 0; j < gridSize; j++) {
         const block = document.createElement("div");
@@ -20,23 +36,28 @@ document.addEventListener("DOMContentLoaded", function() {
         grid.appendChild(block);
       }
     }
+    placeFielders();
   }
 
   function resetGrid() {
+    // Clear existing grid
+    while (grid.firstChild) {
+      grid.firstChild.remove();
+    }
+
+    // Generate new grid with updated size
+    createGrid();
+
+    // Reset other variables and UI
     score = 0;
     isGameOver = false;
     selectedSafeSquares = [];
     scoreDisplay.textContent = score;
-    createGrid();
-    placeFielders();
   }
 
-  function placeFielders() {
-    const blocks = Array.from(document.querySelectorAll(".game-block"));
-    const fielderIndexes = generateRandomIndexes(numFielders, blocks.length);
-    for (let index of fielderIndexes) {
-      blocks[index].dataset.hasFielder = "true";
-    }
+  function changeGridSize(n) {
+    gridSize = n;
+    resetGrid();
   }
 
   function handleClick() {
@@ -96,6 +117,19 @@ document.addEventListener("DOMContentLoaded", function() {
     });
   }
 
+  function placeFielders() {
+    const blocks = Array.from(document.querySelectorAll(".game-block"));
+    const fielderIndexes = generateRandomIndexes(numFielders, blocks.length);
+
+    blocks.forEach((block, index) => {
+      if (fielderIndexes.includes(index)) {
+        block.dataset.hasFielder = true;
+      } else {
+        block.dataset.hasFielder = false;
+      }
+    });
+  }
+
   function generateRandomIndexes(count, max) {
     const indexes = [];
     while (indexes.length < count) {
@@ -125,4 +159,14 @@ document.addEventListener("DOMContentLoaded", function() {
   }
 
   resetButton.addEventListener("click", resetGrid);
+  const gridSizeSelect = document.getElementById("grid-size-select");
+
+  gridSizeSelect.addEventListener("change", function() {
+    const selectedSize = parseInt(this.value);
+    if (!isNaN(selectedSize)) {
+      changeGridSize(selectedSize);
+    }
+  });
+
+  createGrid();
 });
