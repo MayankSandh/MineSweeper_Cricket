@@ -27,8 +27,27 @@ document.addEventListener("DOMContentLoaded", function() {
     grid.innerHTML = "";
     grid.style.gridTemplateColumns = `repeat(${gridSize}, 80px)`;
   
-    const totalSafeSquares = gridSize * gridSize - numFielders;
-    const runsDistribution = getRunsDistribution(totalSafeSquares);
+    const totalSquares = gridSize * gridSize;
+    const scoreSquaresCount = totalSquares - numFielders;
+  
+    const runsDistribution = getRunsDistribution(scoreSquaresCount);
+    const scoreSquares = [];
+  
+    for (const run in runsDistribution) {
+      const count = runsDistribution[run];
+      for (let i = 0; i < count; i++) {
+        scoreSquares.push(run);
+      }
+    }
+  
+    const fielderSquares = Array.from({ length: numFielders }, () => true);
+    const safeSquares = Array.from({ length: scoreSquaresCount }, () => false);
+  
+    const allSquares = fielderSquares.concat(safeSquares);
+  
+    shuffleArray(allSquares);
+  
+    let fielderIndex = 0;
   
     for (let i = 0; i < gridSize; i++) {
       for (let j = 0; j < gridSize; j++) {
@@ -38,8 +57,12 @@ document.addEventListener("DOMContentLoaded", function() {
         block.dataset.col = j;
         block.addEventListener("click", handleClick);
   
-        if (block.dataset.hasFielder !== "true") {
-          const run = getRunForSquare(runsDistribution);
+        if (allSquares.pop()) {
+          block.dataset.hasFielder = true;
+          block.addEventListener("click", gameOver);
+        } else {
+          const randomIndex = Math.floor(Math.random() * scoreSquares.length);
+          const run = scoreSquares.splice(randomIndex, 1)[0];
           block.dataset.run = run;
   
           const scoreText = document.createElement("span");
@@ -53,6 +76,15 @@ document.addEventListener("DOMContentLoaded", function() {
     }
   }
   
+  function shuffleArray(array) {
+    for (let i = array.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [array[i], array[j]] = [array[j], array[i]];
+    }
+  }
+  
+  
+
   function getRunsDistribution(totalSafeSquares) {
     if (gridSize === 7) {
       return {
@@ -77,7 +109,7 @@ document.addEventListener("DOMContentLoaded", function() {
       };
     }
   }
-  
+
   function getRunForSquare(runsDistribution) {
     const runOptions = [];
     for (const run in runsDistribution) {
@@ -131,9 +163,18 @@ document.addEventListener("DOMContentLoaded", function() {
     }
   }
 
+  function placeFielder() {
+    const blocks = Array.from(document.querySelectorAll(".game-block"));
+    const availableBlocks = blocks.filter(block => block.dataset.hasFielder !== "true" && !block.classList.contains("scored"));
+    const randomIndex = Math.floor(Math.random() * availableBlocks.length);
+    const fielderBlock = availableBlocks[randomIndex];
+    fielderBlock.dataset.hasFielder = true;
+  }
+
   function gameOver() {
     isGameOver = true;
     setTimeout(() => {
+      revealFielders();
       revealNonSelectedSafeSquares();
       showPopupMessage();
     }, 1000);
