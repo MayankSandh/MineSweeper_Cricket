@@ -17,7 +17,7 @@ document.addEventListener("DOMContentLoaded", function() {
     }
   });
 
-  let gridSize = 7;
+  let gridSize = 6;
   const numFielders = 11;
   let score = 0;
   let isGameOver = false;
@@ -26,6 +26,10 @@ document.addEventListener("DOMContentLoaded", function() {
   function createGrid() {
     grid.innerHTML = "";
     grid.style.gridTemplateColumns = `repeat(${gridSize}, 80px)`;
+  
+    const totalSafeSquares = gridSize * gridSize - numFielders;
+    const runsDistribution = getRunsDistribution(totalSafeSquares);
+  
     for (let i = 0; i < gridSize; i++) {
       for (let j = 0; j < gridSize; j++) {
         const block = document.createElement("div");
@@ -33,10 +37,57 @@ document.addEventListener("DOMContentLoaded", function() {
         block.dataset.row = i;
         block.dataset.col = j;
         block.addEventListener("click", handleClick);
+  
+        if (block.dataset.hasFielder !== "true") {
+          const run = getRunForSquare(runsDistribution);
+          block.dataset.run = run;
+  
+          const scoreText = document.createElement("span");
+          scoreText.classList.add("score-text");
+          scoreText.textContent = run;
+          block.appendChild(scoreText);
+        }
+  
         grid.appendChild(block);
       }
     }
-    placeFielders();
+  }
+  
+  function getRunsDistribution(totalSafeSquares) {
+    if (gridSize === 7) {
+      return {
+        6: 4,
+        4: 6,
+        2: 10,
+        1: 18
+      };
+    } else if (gridSize === 6) {
+      return {
+        6: 2,
+        4: 3,
+        2: 8,
+        1: 12
+      };
+    } else if (gridSize === 5) {
+      return {
+        6: 1,
+        4: 2,
+        2: 5,
+        1: 6
+      };
+    }
+  }
+  
+  function getRunForSquare(runsDistribution) {
+    const runOptions = [];
+    for (const run in runsDistribution) {
+      const count = runsDistribution[run];
+      for (let i = 0; i < count; i++) {
+        runOptions.push(run);
+      }
+    }
+    const randomIndex = Math.floor(Math.random() * runOptions.length);
+    return runOptions.splice(randomIndex, 1)[0];
   }
 
   function resetGrid() {
@@ -71,7 +122,8 @@ document.addEventListener("DOMContentLoaded", function() {
       revealFielderBlocks(this);
       gameOver();
     } else {
-      score++;
+      const run = parseInt(this.dataset.run);
+      score += run;
       this.classList.add("scored");
       this.removeEventListener("click", handleClick);
       scoreDisplay.textContent = score;
@@ -115,30 +167,6 @@ document.addEventListener("DOMContentLoaded", function() {
         block.classList.add("selected-safe");
       }
     });
-  }
-
-  function placeFielders() {
-    const blocks = Array.from(document.querySelectorAll(".game-block"));
-    const fielderIndexes = generateRandomIndexes(numFielders, blocks.length);
-
-    blocks.forEach((block, index) => {
-      if (fielderIndexes.includes(index)) {
-        block.dataset.hasFielder = true;
-      } else {
-        block.dataset.hasFielder = false;
-      }
-    });
-  }
-
-  function generateRandomIndexes(count, max) {
-    const indexes = [];
-    while (indexes.length < count) {
-      const randomIndex = Math.floor(Math.random() * max);
-      if (!indexes.includes(randomIndex)) {
-        indexes.push(randomIndex);
-      }
-    }
-    return indexes;
   }
 
   function showPopupMessage() {

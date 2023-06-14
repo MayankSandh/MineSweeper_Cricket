@@ -107,3 +107,29 @@ h1 {
 .dropdown:hover .dropbtn {
   background-color: #3e8e41;
 }
+
+.score-text {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: white;
+  font-size: 24px;
+  font-weight: bold;
+  z-index: 1;
+}
+
+.scored {
+  background-color: #39b54a;
+  position: relative;
+}
+
+.scored:hover {
+  background-color: #2e8e3d;
+}
+
+.scored .score-text {
+  background-color: #39b54a;
+  padding: 4px 8px;
+  border-radius: 4px;
+}
