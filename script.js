@@ -55,11 +55,10 @@ document.addEventListener("DOMContentLoaded", function() {
         block.classList.add("game-block");
         block.dataset.row = i;
         block.dataset.col = j;
-        block.addEventListener("click", handleClick);
   
         if (allSquares.pop()) {
           block.dataset.hasFielder = true;
-          block.addEventListener("click", gameOver);
+          block.addEventListener("click", handleClick);
         } else {
           const randomIndex = Math.floor(Math.random() * scoreSquares.length);
           const run = scoreSquares.splice(randomIndex, 1)[0];
@@ -74,7 +73,20 @@ document.addEventListener("DOMContentLoaded", function() {
         grid.appendChild(block);
       }
     }
+  
+    // Add event listener for all blocks after creating them
+    const blocks = document.querySelectorAll(".game-block");
+    blocks.forEach(block => {
+      block.addEventListener("click", handleClick);
+    });
+  
+    // Add event listener for fielder blocks separately
+    const fielderBlocks = document.querySelectorAll(".game-block[data-has-fielder='true']");
+    fielderBlocks.forEach(block => {
+      block.addEventListener("click", gameOver);
+    });
   }
+  
   
   function shuffleArray(array) {
     for (let i = array.length - 1; i > 0; i--) {
@@ -142,74 +154,12 @@ document.addEventListener("DOMContentLoaded", function() {
     gridSize = n;
     resetGrid();
   }
-
-  function handleClick() {
-    if (isGameOver) {
-      return;
-    }
-
-    const hasFielder = this.dataset.hasFielder === "true";
-    if (hasFielder) {
-      this.classList.add("fielder");
-      revealFielderBlocks(this);
-      gameOver();
-    } else {
-      const run = parseInt(this.dataset.run);
-      score += run;
-      this.classList.add("scored");
-      this.removeEventListener("click", handleClick);
-      scoreDisplay.textContent = score;
-      selectedSafeSquares.push(this);
-    }
-  }
-
-  function placeFielder() {
-    const blocks = Array.from(document.querySelectorAll(".game-block"));
-    const availableBlocks = blocks.filter(block => block.dataset.hasFielder !== "true" && !block.classList.contains("scored"));
-    const randomIndex = Math.floor(Math.random() * availableBlocks.length);
-    const fielderBlock = availableBlocks[randomIndex];
-    fielderBlock.dataset.hasFielder = true;
-  }
-
   function gameOver() {
     isGameOver = true;
-    setTimeout(() => {
-      revealFielders();
-      revealNonSelectedSafeSquares();
-      showPopupMessage();
-    }, 1000);
+    showPopupMessage();
+    revealNonSelectedSafeSquares();
+    revealFielders();
   }
-
-  function revealFielderBlocks(clickedBlock) {
-    const fielderBlocks = [];
-    const nonSelectedSafeBlocks = [];
-
-    const blocks = Array.from(document.querySelectorAll(".game-block"));
-    blocks.forEach(block => {
-      const hasFielder = block.dataset.hasFielder === "true";
-      if (hasFielder && block !== clickedBlock) {
-        fielderBlocks.push(block);
-      } else if (!hasFielder) {
-        nonSelectedSafeBlocks.push(block);
-      }
-    });
-
-    fielderBlocks.forEach(block => block.classList.add("fielder-others"));
-    nonSelectedSafeBlocks.forEach(block => block.classList.add("non-selected-safe"));
-  }
-
-  function revealNonSelectedSafeSquares() {
-    const blocks = Array.from(document.querySelectorAll(".game-block"));
-    blocks.forEach(block => {
-      const hasFielder = block.dataset.hasFielder === "true";
-      if (!hasFielder && !block.classList.contains("scored") && !selectedSafeSquares.includes(block)) {
-        block.classList.add("non-selected-safe-light");
-      } else if (!hasFielder && !block.classList.contains("scored") && selectedSafeSquares.includes(block)) {
-        block.classList.add("selected-safe");
-      }
-    });
-  }
-
   function showPopupMessage() {
     let popupMessage = "";
     if (score === 0) {
@@ -223,9 +173,78 @@ document.addEventListener("DOMContentLoaded", function() {
     } else {
       popupMessage = "Game over. Your score is " + score;
     }
-
+  
     alert(popupMessage);
   }
+  
+  
+  
+function handleClick() {
+  if (isGameOver) {
+    return;
+  }
+
+  const hasFielder = this.dataset.hasFielder === "true";
+  const isAlreadySelected = this.classList.contains("scored");
+
+  if (hasFielder) {
+    this.classList.add("fielder");
+    revealFielderBlocks(this);
+  } else if (!isAlreadySelected) {
+    const run = parseInt(this.dataset.run);
+    score += run;
+    this.classList.add("scored");
+    this.removeEventListener("click", handleClick);
+    scoreDisplay.textContent = score;
+    selectedSafeSquares.push(this);
+  }
+}
+
+
+  function placeFielder() {
+    const blocks = Array.from(document.querySelectorAll(".game-block"));
+    const availableBlocks = blocks.filter(block => block.dataset.hasFielder !== "true" && !block.classList.contains("scored"));
+    const randomIndex = Math.floor(Math.random() * availableBlocks.length);
+    const fielderBlock = availableBlocks[randomIndex];
+    fielderBlock.dataset.hasFielder = true;
+  }
+
+
+
+  function revealFielderBlocks(clickedBlock) {
+    const fielderBlocks = [];
+    const nonSelectedSafeBlocks = [];
+  
+    const blocks = Array.from(document.querySelectorAll(".game-block"));
+    blocks.forEach(block => {
+      const hasFielder = block.dataset.hasFielder === "true";
+      if (hasFielder && block !== clickedBlock) {
+        fielderBlocks.push(block);
+      } else if (!hasFielder) {
+        nonSelectedSafeBlocks.push(block);
+      }
+    });
+  
+    fielderBlocks.forEach(block => block.classList.add("fielder-others"));
+    nonSelectedSafeBlocks.forEach(block => block.classList.add("non-selected-safe"));
+  
+    return; // Add this line to end the function execution
+  }
+  
+  
+  
+  function revealNonSelectedSafeSquares() {
+    const blocks = Array.from(document.querySelectorAll(".game-block"));
+    blocks.forEach(block => {
+      const hasFielder = block.dataset.hasFielder === "true";
+      if (!hasFielder && !block.classList.contains("scored") && !selectedSafeSquares.includes(block)) {
+        block.classList.add("non-selected-safe-light");
+      } else if (!hasFielder && !block.classList.contains("scored") && selectedSafeSquares.includes(block)) {
+        block.classList.add("selected-safe");
+      }
+    });
+  }
+
 
   resetButton.addEventListener("click", resetGrid);
   const gridSizeSelect = document.getElementById("grid-size-select");
