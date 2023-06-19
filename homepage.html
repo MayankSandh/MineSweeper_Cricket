@@ -1,20 +1,21 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Minesweeper Cricket - Homepage</title>
+  <title>Minesweeper Cricket!</title>
   <style>
     body {
-      text-align: center;
       display: flex;
-      flex-direction: column;
-      align-items: center;
       justify-content: center;
+      align-items: center;
       height: 100vh;
       font-family: Arial, sans-serif;
+      text-align: center;
+      color: white;
     }
 
     h1 {
-      margin-top: 20px;
+      font-size: 46px;
+      font-weight: bold;
     }
 
     .button-container {
@@ -22,17 +23,57 @@
     }
 
     .button-container button {
-      margin: 10px;
+      display: inline-block;
       padding: 10px 20px;
       font-size: 18px;
+      font-weight: bold;
+      text-transform: uppercase;
+      border: none;
+      border-radius: 4px;
+      background-color: #2196F3;
+      color: #fff;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    .button-container button:hover {
+      background-color: #0D47A1;
+    }
+    /* Background image styles */
+    .background-image {
+      background-image: url("image0.jpg");
+      opacity: 0.60; /* Adjust the opacity value as needed */
+      background-size: cover;
+      background-position: center;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -1; /* Ensure the background image is behind other elements */
     }
   </style>
 </head>
 <body>
-  <h1>Welcome to Minesweeper Cricket</h1>
-  <div class="button-container">
-    <button onclick="window.location.href = 'index.html'">Single Player</button>
-    <button onclick="window.location.href = 'multi.html'">Multiplayer</button>
+  <div>
+    <h1>Welcome to</h1>
+    <h1>Minesweeper Cricket!</h1>
+  <!-- Background Image -->
+  <div class="background-image"></div>
+    <div class="button-container">
+      <button onclick="navigateToSinglePlayer()">Single Player</button>
+      <button onclick="navigateToMultiPlayer()">Multiplayer</button>
+    </div>
   </div>
+
+  <script>
+    function navigateToSinglePlayer() {
+      window.location.href = "index.html";
+    }
+
+    function navigateToMultiPlayer() {
+      window.location.href = "form.html";
+    }
+  </script>
 </body>
 </html>

@@ -5,24 +5,41 @@
   <link rel="stylesheet" type="text/css" href="style.css">
 </head>
 <body>
+  <!-- Game Title -->
   <h1>Minesweeper Cricket</h1>
-  <button id="home-button" onclick="location.href='homepage.html'">Home</button>
+
+  <!-- Background Image -->
+  <div class="background-image"></div>
+
+  <!-- Game Board -->
   <div class="game-board">
     <!-- Grid will be dynamically generated here -->
   </div>
+
+  <!-- Scorecard -->
   <div class="scorecard">
     <h2>Score: <span id="score">0</span></h2>
   </div>
+
+  <!-- Reset Button -->
   <button id="reset-button">Reset</button>
+
+  <!-- Home Button -->
+  <button id="home-button" onclick="location.href='homepage.html'">Home</button>
+  
+
+  <!-- Grid Size Dropdown -->
   <div class="dropdown">
     <button class="dropbtn">Choose grid size &#9662;</button>
     <div class="dropdown-content">
+      <!-- Dropdown options for grid sizes -->
       <div class="dropdown-option" data-size="5">5x5</div>
       <div class="dropdown-option" data-size="6">6x6</div>
       <div class="dropdown-option" data-size="7">7x7</div>
     </div>
   </div>
 
+  <!-- JavaScript -->
   <script src="script.js"></script>
 </body>
 </html>

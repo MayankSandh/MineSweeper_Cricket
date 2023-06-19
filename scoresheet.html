@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Scoresheet</title>
+  <style>
+    body {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      font-family: Arial, sans-serif;
+      text-align: center;
+    }
+
+    h1 {
+      font-size: 28px;
+      font-weight: bold;
+    }
+
+    .scoresheet-table {
+      margin-top: 20px;
+      border-collapse: collapse;
+    }
+
+    .scoresheet-table th,
+    .scoresheet-table td {
+      padding: 10px;
+    }
+
+    .scoresheet-table th {
+      font-weight: bold;
+    }
+
+    .container {
+      background-color: white;
+      padding: 20px;
+      border-radius: 20px;
+      display: inline-block;
+    }
+
+    .winner {
+      font-size: 36px;
+      color: green;
+      margin-bottom: 10px;
+    }
+
+    #home-button {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+    }
+
+    .background-image {
+      background-image: url("image4.jpg");
+      opacity: 0.5; /* Adjust the opacity value as needed */
+      background-size: cover;
+      background-position: center;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -1; /* Ensure the background image is behind other elements */
+    }
+  </style>
+  <style src="style.css"></style>
+</head>
+<body>
+  <!-- Background Image -->
+  <div class="background-image"></div>
+  <div class="container">
+    <!-- Home Button -->
+    <button id="home-button" onclick="location.href='homepage.html'">Home</button>
+    <h1>Scoresheet</h1>
+
+    <div class="winner" id="winner"></div>
+
+    <table class="scoresheet-table" id="scoresheet">
+      <thead>
+        <tr>
+          <th>Player</th>
+          <th>Score</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+  </div>
+
+  <script>
+    // Retrieve the scoresheet from local storage
+    const scoresheet = JSON.parse(localStorage.getItem("scoresheet"));
+
+    // Get the maximum score from the scoresheet
+    const maxScore = Math.max(...Object.values(scoresheet));
+
+    // Get the winner's name
+    const winner = Object.keys(scoresheet).find(player => scoresheet[player] === maxScore);
+
+    // Display the winner
+    const winnerElement = document.getElementById("winner");
+    winnerElement.textContent = `Winner: ${winner}`;
+
+    // Create the scoresheet table rows
+    const tbody = document.querySelector("#scoresheet tbody");
+    for (const player in scoresheet) {
+      const score = scoresheet[player];
+      const row = document.createElement("tr");
+
+      const playerCell = document.createElement("td");
+      playerCell.textContent = player;
+      row.appendChild(playerCell);
+
+      const scoreCell = document.createElement("td");
+      scoreCell.textContent = score;
+      row.appendChild(scoreCell);
+
+      tbody.appendChild(row);
+    }
+  </script>
+</body>
+</html>

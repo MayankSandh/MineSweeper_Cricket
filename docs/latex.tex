@@ -1,0 +1,60 @@
+\documentclass{article}
+\usepackage{listings}
+\usepackage{natbib}
+
+\title{Minesweeper Cricket - Code Description}
+\author{Mayank Sandh - 22B0962}
+
+\begin{document}
+\maketitle
+
+\section{Introduction}
+
+This report provides an in-depth analysis of the working of a single-player game called "Minesweeper Cricket" implemented using HTML, CSS, and JavaScript. The game is designed to have a grid-based playing board where the player can interact with various blocks and elements. The objective of the game is to score points by clicking on specific blocks while avoiding others. The report covers the overall structure of the code, the game mechanics, and the implemented features.
+
+\section{Code Description}
+
+The code for Minesweeper Cricket consists of three main components: the HTML markup, the CSS styling, and the JavaScript logic. Let's delve into each component and understand its purpose and functionality.
+
+\subsection{HTML Markup}
+
+The HTML markup defines the structure of the game's user interface. It includes elements such as the game board, score display, reset button, and a dropdown menu to choose the grid size. Here's an overview of the main elements:
+
+\begin{itemize}
+  \item \textbf{Game Board:} Represented by the \texttt{div} element with the class \texttt{game-board}, this is where the grid-based playing field is dynamically generated.
+  \item \textbf{Score Display:} The current score is displayed using the \texttt{span} element with the \texttt{id} \texttt{score}.
+  \item \textbf{Reset Button:} The \texttt{button} element with the \texttt{id} \texttt{reset-button} allows the player to reset the game.
+  \item \textbf{Grid Size Dropdown:} The dropdown menu allows the player to choose the grid size by clicking on the \texttt{dropbtn} button and selecting an option from the \texttt{dropdown-content}.
+\end{itemize}
+
+\subsection{CSS Styling}
+
+The CSS styling is responsible for the visual presentation of the game interface. It defines the layout, colors, and animations used throughout the game. Here's an overview of the main CSS styles:
+
+\begin{itemize}
+  \item \textbf{Layout:} The \texttt{body} element is styled to center the content using flexbox and set a background image. The game board (\texttt{game-board}) is a grid layout, and the blocks (\texttt{game-block}) are styled as square elements.
+  \item \textbf{Colors:} Various color styles are defined for different game elements such as scored blocks, fielders, safe squares, and selected squares.
+  \item \textbf{Animations:} The \texttt{@keyframes} rule defines the \texttt{flash} animation used for the fielder blocks.
+\end{itemize}
+
+\subsection{JavaScript Logic}
+
+The JavaScript logic implements the game mechanics and handles user interactions. It dynamically generates the game grid, assigns fielders and safe squares, tracks the score, and handles click events. Here's an overview of the main JavaScript functions:
+
+\begin{itemize}
+  \item \texttt{createGrid():} This function generates the game grid based on the chosen grid size. It randomly assigns fielder blocks and safe squares with different run values. It also attaches click event listeners to the blocks.
+  \item \texttt{shuffleArray(array):} This utility function shuffles the elements of an array.
+  \item \texttt{getRunsDistribution(size):} This function calculates the number of fielders and safe squares based on the grid size.
+  \item \texttt{handleBlockClick():} This function is called when a block is clicked. It updates the score, highlights the clicked block, and checks if the game is won or lost.
+  \item \texttt{updateScore(runValue):} This function updates the score based on the run value of the clicked block.
+  \item \texttt{resetGame():} This function resets the game by clearing the game board and score.
+\end{itemize}
+
+\section{Conclusion}
+
+The Minesweeper Cricket game provides an engaging single-player experience where players aim to score points by clicking on safe squares while avoiding fielder blocks. The game's code utilizes HTML, CSS, and JavaScript to create the interactive grid-based playing board, track the score, and handle user interactions. By understanding the code's structure and functionality, developers can gain insights into game development concepts such as grid generation, event handling, and dynamic styling. With further enhancements, Minesweeper Cricket has the potential to become a popular game enjoyed by players worldwide.
+
+\bibliographystyle{plainnat}
+\bibliography{references}
+
+\end{document}
